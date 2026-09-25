@@ -1,0 +1,31 @@
+DELIMITER //
+
+CREATE FUNCTION calcular_media(
+    p_nota1 DECIMAL(5,2),
+    p_nota2 DECIMAL(5,2)
+)
+RETURNS DECIMAL(5,2)
+DETERMINISTIC
+BEGIN
+    RETURN (p_nota1 + p_nota2) / 2;
+END//
+
+CREATE PROCEDURE mostrar_situacao(IN p_id_aluno INT)
+BEGIN
+    SELECT
+        nome,
+        nota1,
+        nota2,
+        calcular_media(nota1, nota2) AS media,
+        CASE
+            WHEN calcular_media(nota1, nota2) >= 6 THEN 'Aprovado'
+            ELSE 'Reprovado'
+        END AS situacao
+    FROM alunos
+    WHERE id = p_id_aluno;
+END//
+
+DELIMITER ;
+
+CALL mostrar_situacao(5);
+ 
